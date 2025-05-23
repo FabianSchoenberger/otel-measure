@@ -20,6 +20,11 @@ repositories {
     mavenCentral()
 }
 
+otel {
+    host = "localhost:4318"
+    service = "plugin"
+}
+
 kotlin {
     jvm {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -46,14 +51,5 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
             implementation("com.infendro.otel:util:1.0.0")
         }
-    }
-
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-P", "plugin:otel-plugin:enabled=true",
-            "-P", "plugin:otel-plugin:debug=true",
-            "-P", "plugin:otel-plugin:host=localhost:4318",
-            "-P", "plugin:otel-plugin:service=plugin"
-        )
     }
 }
