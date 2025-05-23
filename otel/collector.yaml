@@ -5,8 +5,6 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 exporters:
-  debug:
-    verbosity: detailed
   otlp/jaeger:
     endpoint: http://jaeger:4317
     tls:
@@ -16,4 +14,4 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [debug, otlp/jaeger]
+      exporters: [otlp/jaeger]
