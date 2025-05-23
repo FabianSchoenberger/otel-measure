@@ -5,7 +5,6 @@ pluginManagement{
             credentials {
                 username = providers.gradleProperty("GITHUB_USERNAME").get()
                 password = providers.gradleProperty("GITHUB_USERNAME").get()
-
             }
         }
         mavenLocal()

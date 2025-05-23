@@ -33,6 +33,7 @@ class GameOfLife(
         }
     }
 
+    // prepend underscore to ignore the function
     private fun _neighbors(
         x: Int,
         y: Int
