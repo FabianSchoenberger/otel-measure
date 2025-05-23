@@ -1,0 +1,59 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
+plugins {
+    kotlin("multiplatform") version "2.1.10"
+    id("com.infendro.otel") version "1.0.0"
+}
+
+group = "com.infendro.otel.measure"
+version = "1.0.0"
+
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/dcxp/opentelemetry-kotlin")
+        credentials {
+            username = project.property("GITHUB_USERNAME") as String
+            password = project.property("GITHUB_PASSWORD") as String
+        }
+    }
+    mavenLocal()
+    mavenCentral()
+}
+
+kotlin {
+    jvm {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        mainRun {
+            mainClass.set("MainKt")
+        }
+    }
+    js {
+        nodejs()
+        useCommonJs()
+        binaries.executable()
+    }
+    linuxX64 {
+        binaries.executable {
+            entryPoint = "main"
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation("io.opentelemetry.kotlin.api:all:1.0.570")
+            implementation("io.opentelemetry.kotlin.sdk:sdk-trace:1.0.570")
+            implementation("com.infendro.otel:otlp-exporter:1.0.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+            implementation("com.infendro.otel:util:1.0.0")
+        }
+    }
+
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-P", "plugin:otel-plugin:enabled=true",
+            "-P", "plugin:otel-plugin:debug=true",
+            "-P", "plugin:otel-plugin:host=localhost:4318",
+            "-P", "plugin:otel-plugin:service=plugin"
+        )
+    }
+}
