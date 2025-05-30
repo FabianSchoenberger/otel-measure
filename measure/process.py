@@ -81,7 +81,8 @@ def ci(data):
     moe = t.ppf(1 - alpha / 2, df) * data.std(ddof=1) / np.sqrt(n)
     lower = mean - moe
     upper = mean + moe
-    return lower, upper
+    s = data.std(ddof=1)
+    return lower, upper, s
 
 
 for directory in directories:
@@ -99,8 +100,6 @@ for directory in directories:
         if directory != "reference":
             fdata = flush[directory][file]
             flush_ci[directory][file] = ci(fdata)
-
-    # TODO calculate standard deviation
 
 for directory in directories:
     e = exec[directory].values()
@@ -135,12 +134,12 @@ for directory in directories:
     plt.savefig(f"{directory}/boxplot")
 
     # confidence interval
-    e_ci_mean = [(a + b) / 2 for a, b in e_ci]
-    e_ci_error = np.array(e_ci_mean) - [a for a, b in e_ci]
+    e_ci_mean = [(a + b) / 2 for a, b, c in e_ci]
+    e_ci_error = np.array(e_ci_mean) - [a for a, b, c in e_ci]
 
     if directory != "reference":
-        f_ci_mean = [(a + b) / 2 for a, b in f_ci]
-        f_ci_error = np.array(f_ci_mean) - [a for a, b in f_ci]
+        f_ci_mean = [(a + b) / 2 for a, b, c in f_ci]
+        f_ci_error = np.array(f_ci_mean) - [a for a, b, c in f_ci]
 
     plt.figure()
 
@@ -197,11 +196,11 @@ for file in files:
     e = []
     f = []
     for directory in directories:
-        a, b = exec_ci[directory][file]
-        e.append([(round(a, 2), round(b, 2)), (a + b) / 2])
+        a, b, c = exec_ci[directory][file]
+        e.append([(round(a, 2), round(b, 2)), round(c, 2)])
         if directory != "reference":
-            a, b = flush_ci[directory][file]
-            f.append([(round(a, 2), round(b, 2)), (a + b) / 2])
+            a, b, c = flush_ci[directory][file]
+            f.append([(round(a, 2), round(b, 2)), round(c, 2)])
 
     print("- - - - - - " * 10)
     print(f"{file.ljust(6)}\t{str(e[0]).ljust(30)}\t\t{str(e[1]).ljust(30)}\t\t{str(e[2]).ljust(30)}")
