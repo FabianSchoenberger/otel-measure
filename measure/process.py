@@ -109,7 +109,7 @@ for directory in directories:
         f = flush[directory].values()
         f_ci = flush_ci[directory].values()
 
-    # boxplot
+    # boxplot (plugin, manual, reference)
     plt.figure()
 
     if directory != "reference":
@@ -167,6 +167,7 @@ for directory in directories:
     plt.tight_layout()
     plt.savefig(f"{directory}/ci")
 
+# boxplot (jvm, js, native)
 for file in files:
     e = []
     f = []
@@ -191,6 +192,7 @@ for file in files:
     plt.tight_layout()
     plt.savefig(f"{file}")
 
+# table (confidence interval, standard deviation)
 print(f"\t\t{"plugin".ljust(30)}\t\t{'manual'.ljust(30)}\t\t{'reference'.ljust(30)}")
 for file in files:
     e = []
