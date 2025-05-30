@@ -202,6 +202,6 @@ for file in files:
             a, b, c = flush_ci[directory][file]
             f.append([(round(a, 2), round(b, 2)), round(c, 2)])
 
-    print("- - - - - - " * 10)
+    print("- - - - - " * 11)
     print(f"{file.ljust(6)}\t{str(e[0]).ljust(30)}\t\t{str(e[1]).ljust(30)}\t\t{str(e[2]).ljust(30)}")
     print(f"total\t{str(f[0]).ljust(30)}\t\t{str(f[1]).ljust(30)}\t\t{"---".ljust(30)}")
