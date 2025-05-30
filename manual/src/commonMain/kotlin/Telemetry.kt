@@ -4,6 +4,7 @@ import io.opentelemetry.kotlin.context.Context
 import io.opentelemetry.kotlin.sdk.trace.SdkTracerProvider
 import io.opentelemetry.kotlin.sdk.trace.export.BatchSpanProcessor
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 val host = "localhost:4318"
 val service = "manual"
@@ -44,4 +45,4 @@ fun <T> span(name: String, action: () -> T): T {
     }
 }
 
-expect fun await(exporter: OtlpExporter)
+expect fun await(exporter: OtlpExporter, start: Instant)

@@ -23,6 +23,7 @@ repositories {
 otel {
     host = "localhost:4318"
     service = "plugin"
+    debug = true
 }
 
 kotlin {
@@ -30,6 +31,25 @@ kotlin {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         mainRun {
             mainClass.set("MainKt")
+        }
+        compilations.all {
+            tasks.withType<Jar> {
+                doFirst {
+                    manifest {
+                        attributes(
+                            "Main-Class" to "MainKt",
+                            "Class-Path" to runtimeDependencyFiles.files.joinToString(" ") { it.name })
+                    }
+                }
+                doLast {
+                    copy {
+                        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+                        from("build/libs")
+                        from(runtimeDependencyFiles.files)
+                        into("build/lib")
+                    }
+                }
+            }
         }
     }
     js {
@@ -52,4 +72,8 @@ kotlin {
             implementation("com.infendro.otel:util:1.0.0")
         }
     }
+}
+
+task("release") {
+    dependsOn("jvmJar", "jsProductionExecutableValidateGeneratedByCompilerTypeScript", "linkReleaseExecutableLinuxX64")
 }

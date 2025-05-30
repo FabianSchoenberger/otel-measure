@@ -25,6 +25,25 @@ kotlin {
         mainRun {
             mainClass.set("MainKt")
         }
+        compilations.all {
+            tasks.withType<Jar> {
+                doFirst {
+                    manifest {
+                        attributes(
+                            "Main-Class" to "MainKt",
+                            "Class-Path" to runtimeDependencyFiles.files.joinToString(" ") { it.name })
+                    }
+                }
+                doLast {
+                    copy {
+                        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+                        from("build/libs")
+                        from(runtimeDependencyFiles.files)
+                        into("build/lib")
+                    }
+                }
+            }
+        }
     }
     js {
         nodejs()
@@ -48,4 +67,8 @@ kotlin {
             implementation("org.jetbrains.kotlin-wrappers:kotlin-node:2025.4.7-22.13.10")
         }
     }
+}
+
+task("release") {
+    dependsOn("jvmJar", "jsProductionExecutableValidateGeneratedByCompilerTypeScript", "linkReleaseExecutableLinuxX64")
 }

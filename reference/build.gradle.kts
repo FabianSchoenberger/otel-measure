@@ -18,6 +18,25 @@ kotlin {
         mainRun {
             mainClass.set("MainKt")
         }
+        compilations.all {
+            tasks.withType<Jar> {
+                doFirst {
+                    manifest {
+                        attributes(
+                            "Main-Class" to "MainKt",
+                            "Class-Path" to runtimeDependencyFiles.files.joinToString(" ") { it.name })
+                    }
+                }
+                doLast {
+                    copy {
+                        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+                        from("build/libs")
+                        from(runtimeDependencyFiles.files)
+                        into("build/lib")
+                    }
+                }
+            }
+        }
     }
     js {
         nodejs()
@@ -29,4 +48,14 @@ kotlin {
             entryPoint = "main"
         }
     }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+        }
+    }
+}
+
+task("release") {
+    dependsOn("jvmJar", "jsProductionExecutableValidateGeneratedByCompilerTypeScript", "linkReleaseExecutableLinuxX64")
 }

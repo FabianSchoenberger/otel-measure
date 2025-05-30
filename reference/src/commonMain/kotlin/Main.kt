@@ -1,13 +1,21 @@
+import kotlinx.datetime.Clock
+
 fun main() {
-    val gol = GameOfLife(512)
+    val start = Clock.System.now()
+
+    val gol = GameOfLife(100)
     gol.initialize {
-        for (x in arrayOf(0, 16, 32, 48)) {
-            for (y in arrayOf(0, 16, 32, 48)) {
+        for (x in arrayOf(0, 25, 50, 75)) {
+            for (y in arrayOf(0, 25, 50, 75)) {
                 it.glider(x, y)
             }
         }
     }
-    gol.simulate(1000)
+    gol.simulate(500)
+
+    val end = Clock.System.now()
+    val ms = (end - start).inWholeMilliseconds
+    println("Execution finished - $ms ms elapsed")
 }
 
 fun Array<Array<Boolean>>.glider(x: Int, y: Int) {
