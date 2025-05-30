@@ -100,6 +100,7 @@ for directory in directories:
             fdata = flush[directory][file]
             flush_ci[directory][file] = ci(fdata)
 
+    # TODO calculate standard deviation
 
 for directory in directories:
     e = exec[directory].values()
@@ -197,10 +198,10 @@ for file in files:
     f = []
     for directory in directories:
         a, b = exec_ci[directory][file]
-        e.append([(round(a, 2), round(b, 2)), (a+b)/2])
+        e.append([(round(a, 2), round(b, 2)), (a + b) / 2])
         if directory != "reference":
             a, b = flush_ci[directory][file]
-            f.append([(round(a, 2), round(b, 2)), (a+b)/2])
+            f.append([(round(a, 2), round(b, 2)), (a + b) / 2])
 
     print("- - - - - - " * 10)
     print(f"{file.ljust(6)}\t{str(e[0]).ljust(30)}\t\t{str(e[1]).ljust(30)}\t\t{str(e[2]).ljust(30)}")
