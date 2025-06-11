@@ -4,15 +4,7 @@ fun main() {
     val start = Clock.System.now()
 
     span("main") {
-        val gol = GameOfLife(100)
-        gol.initialize {
-            for (x in arrayOf(0, 25, 50, 75)) {
-                for (y in arrayOf(0, 25, 50, 75)) {
-                    it.glider(x, y)
-                }
-            }
-        }
-        gol.simulate(500)
+        GameOfLife.play()
     }
 
     val end = Clock.System.now()
@@ -21,12 +13,4 @@ fun main() {
 
     processor.shutdown()
     await(exporter, start)
-}
-
-fun Array<Array<Boolean>>.glider(x: Int, y: Int) = span("glider") {
-    this[y][x + 2] = true
-    this[y + 1][x] = true
-    this[y + 1][x + 2] = true
-    this[y + 2][x + 1] = true
-    this[y + 2][x + 2] = true
 }

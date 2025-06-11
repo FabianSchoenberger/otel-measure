@@ -55,7 +55,3 @@ kotlin {
         }
     }
 }
-
-task("release") {
-    dependsOn("jvmJar", "jsProductionExecutableValidateGeneratedByCompilerTypeScript", "linkReleaseExecutableLinuxX64")
-}

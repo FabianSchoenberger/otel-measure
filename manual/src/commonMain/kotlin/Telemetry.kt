@@ -11,6 +11,8 @@ val service = "manual"
 val exporter = OtlpExporter(host, service)
 val processor = BatchSpanProcessor
     .builder(exporter)
+    .setMaxQueueSize(Int.MAX_VALUE)
+    .setMaxExportBatchSize(2048)
     .build()
 val provider = SdkTracerProvider
     .builder()
