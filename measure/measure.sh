@@ -19,12 +19,12 @@ runs=100
 #native_file="manual/native.txt"
 
 # reference
-#jvm_command="java -jar ../reference/build/lib/reference-jvm-1.0.0.jar"
-#jvm_file="reference/jvm.txt"
-#js_command="node ../reference/build/js/packages/reference/kotlin/reference.js"
-#js_file="reference/js.txt"
-#native_command="../reference/build/bin/linuxX64/releaseExecutable/reference.kexe"
-#native_file="reference/native.txt"
+jvm_command="java -jar ../reference/build/lib/reference-jvm-1.0.0.jar"
+jvm_file="reference/jvm.txt"
+js_command="node ../reference/build/js/packages/reference/kotlin/reference.js"
+js_file="reference/js.txt"
+native_command="../reference/build/bin/linuxX64/releaseExecutable/reference.kexe"
+native_file="reference/native.txt"
 
 run() {
     command="$1"

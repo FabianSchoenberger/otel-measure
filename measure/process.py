@@ -115,18 +115,18 @@ for directory in directories:
     if directory != "reference":
         plt.subplot(1, 2, 1)
         plt.boxplot(e, tick_labels=["JVM", "JS", "Native"])
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=120000)
         plt.title("Execution Time")
         plt.grid()
 
         plt.subplot(1, 2, 2)
         plt.boxplot(f, tick_labels=["JVM", "JS", "Native"])
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=120000)
         plt.title("Flush Time")
         plt.grid()
     else:
         plt.boxplot(e, tick_labels=["JVM", "JS", "Native"])
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=100)
         plt.title("Execution Time")
         plt.grid()
 
@@ -146,20 +146,20 @@ for directory in directories:
     if directory != "reference":
         plt.subplot(1, 2, 1)
         plt.errorbar([0, 1, 2], e_ci_mean, yerr=e_ci_error, capsize=3, linestyle="")
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=120000)
         plt.title(r"Execution Time $\mu$")
         plt.xticks([0, 1, 2], ["JVM", "JS", "Native"])
         plt.grid()
 
         plt.subplot(1, 2, 2)
         plt.errorbar([0, 1, 2], f_ci_mean, yerr=f_ci_error, capsize=3, linestyle="")
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=120000)
         plt.title(r"Total Execution Time $\mu$")
         plt.xticks([0, 1, 2], ["JVM", "JS", "Native"])
         plt.grid()
     else:
         plt.errorbar([0, 1, 2], e_ci_mean, yerr=e_ci_error, capsize=3, linestyle="")
-        plt.ylim(0, 2000)
+        plt.ylim(bottom=0, top=100)
         plt.title(r"Execution Time $\mu$")
         plt.xticks([0, 1, 2], ["JVM", "JS", "Native"])
         plt.grid()
@@ -179,13 +179,13 @@ for file in files:
     plt.figure()
     plt.subplot(1, 2, 1)
     plt.boxplot(e, tick_labels=["Plugin", "Manual", "Reference"])
-    plt.ylim(0, 2000)
+    plt.ylim(bottom=0, top=120000)
     plt.title("Execution Time")
     plt.grid()
 
     plt.subplot(1, 2, 2)
     plt.boxplot([*f, e[-1]], tick_labels=["Plugin", "Manual", "Reference"])
-    plt.ylim(0, 2000)
+    plt.ylim(bottom=0, top=120000)
     plt.title("Total Execution Time")
     plt.grid()
 
