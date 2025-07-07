@@ -68,7 +68,6 @@ kotlin {
             implementation("io.opentelemetry.kotlin.api:all:1.0.570")
             implementation("io.opentelemetry.kotlin.sdk:sdk-trace:1.0.570")
             implementation("com.infendro.otel:otlp-exporter:1.0.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
             implementation("com.infendro.otel:util:1.0.0")
         }
     }
