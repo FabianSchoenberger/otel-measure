@@ -4,6 +4,7 @@ services:
     build: ./
     ports:
       - "4318:4318" # HTTP
+
   jaeger:
     image: jaegertracing/all-in-one:1.49
     environment:
@@ -15,5 +16,6 @@ services:
       - badger:/badger
     ports:
       - "16686:16686" # UI
+
 volumes:
   badger:
