@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import t
 
-directories = ["plugin", "manual", "reference"]
+directories = ["plugin", "manual", "reference", "manual-noop"]
 files = ["jvm", "js", "native"]
 
 exec = {
@@ -24,6 +24,11 @@ exec = {
         "js": [],
         "native": [],
     },
+    "manual-noop": {
+        "jvm": [],
+        "js": [],
+        "native": [],
+    }
 }
 flush = {
     "plugin": {
@@ -32,11 +37,6 @@ flush = {
         "native": [],
     },
     "manual": {
-        "jvm": [],
-        "js": [],
-        "native": [],
-    },
-    "reference": {
         "jvm": [],
         "js": [],
         "native": [],
@@ -59,6 +59,11 @@ exec_ci = {
         "js": (),
         "native": (),
     },
+    "manual-noop": {
+        "jvm": [],
+        "js": [],
+        "native": [],
+    }
 }
 flush_ci = {
     "plugin": {
@@ -91,14 +96,14 @@ for directory in directories:
         data = pd.read_csv(f"{directory}/{file}.txt", sep=" ", header=None, names=["exec", "flush"])
 
         exec[directory][file] = data["exec"]
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
             flush[directory][file] = data["flush"]
 
     for file in files:
         edata = exec[directory][file]
         exec_ci[directory][file] = ci(edata)
 
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
             fdata = flush[directory][file]
             flush_ci[directory][file] = ci(fdata)
 
@@ -107,14 +112,13 @@ if sys.argv[1] == "project":
         e = exec[directory].values()
         e_ci = exec_ci[directory].values()
 
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
             f = flush[directory].values()
             f_ci = flush_ci[directory].values()
 
         # boxplot (plugin, manual, reference)
-        plt.figure()
-
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
+            plt.figure(figsize=(10, 5))
             plt.subplot(1, 2, 1)
             plt.boxplot(e, tick_labels=["JVM", "JS", "Native"])
             plt.ylim(bottom=0, top=120000)
@@ -124,11 +128,12 @@ if sys.argv[1] == "project":
             plt.subplot(1, 2, 2)
             plt.boxplot(f, tick_labels=["JVM", "JS", "Native"])
             plt.ylim(bottom=0, top=120000)
-            plt.title("Flush Time")
+            plt.title("Total Time")
             plt.grid()
         else:
+            plt.figure(figsize=(5, 5))
             plt.boxplot(e, tick_labels=["JVM", "JS", "Native"])
-            plt.ylim(bottom=0, top=100)
+            plt.ylim(bottom=0, top=50)
             plt.title("Execution Time")
             plt.grid()
 
@@ -139,13 +144,13 @@ if sys.argv[1] == "project":
         e_ci_mean = [(a + b) / 2 for a, b, c in e_ci]
         e_ci_error = np.array(e_ci_mean) - [a for a, b, c in e_ci]
 
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
             f_ci_mean = [(a + b) / 2 for a, b, c in f_ci]
             f_ci_error = np.array(f_ci_mean) - [a for a, b, c in f_ci]
 
         plt.figure()
 
-        if directory != "reference":
+        if directory != "reference" and directory != "manual-noop":
             plt.subplot(1, 2, 1)
             plt.errorbar([0, 1, 2], e_ci_mean, yerr=e_ci_error, capsize=3, linestyle="")
             plt.ylim(bottom=0, top=120000)
@@ -197,18 +202,19 @@ elif sys.argv[1] == "target":
 
 elif sys.argv[1] == "table":
     np.set_printoptions(legacy='1.25')
+    just = 30
     # table (confidence interval, standard deviation)
-    print(f"\t\t{"plugin".ljust(30)}\t\t{'manual'.ljust(30)}\t\t{'reference'.ljust(30)}")
+    print(f"\t{"plugin".ljust(just)}\t\t{'manual'.ljust(just)}\t\t{'reference'.ljust(just)}\t\t{'noop'.ljust(just)}")
     for file in files:
         e = []
         f = []
         for directory in directories:
             a, b, c = exec_ci[directory][file]
-            e.append([(round(a, 2), round(b, 2)), round(a + (b - a) / 2,2), round((b - a) / 2, 2), round(c, 2)])
-            if directory != "reference":
+            e.append([round(a + (b - a) / 2, 2), round((b - a) / 2, 2), round(c, 2)])
+            if directory != "reference" and directory != "manual-noop":
                 a, b, c = flush_ci[directory][file]
-                f.append([(round(a, 2), round(b, 2)), round(a + (b - a) / 2,2), round((b - a) / 2, 2), round(c, 2)])
+                f.append([round(a + (b - a) / 2, 2), round((b - a) / 2, 2), round(c, 2)])
 
-        print("- - - - - " * 11)
-        print(f"{file.ljust(6)}\t{str(e[0]).ljust(30)}\t\t{str(e[1]).ljust(30)}\t\t{str(e[2]).ljust(30)}")
-        print(f"total\t{str(f[0]).ljust(30)}\t\t{str(f[1]).ljust(30)}\t\t{"---".ljust(30)}")
+        print("- - - - " + ("- " * int(((just + 4) * 4) / 2)))
+        print(f"{file.ljust(6)}\t{str(e[0]).ljust(just)}\t\t{str(e[1]).ljust(just)}\t\t{str(e[2]).ljust(just)}\t\t{str(e[3]).ljust(just)}")
+        print(f"total\t{str(f[0]).ljust(just)}\t\t{str(f[1]).ljust(just)}\t\t{"---".ljust(just)}\t\t{"---".ljust(just)}")
